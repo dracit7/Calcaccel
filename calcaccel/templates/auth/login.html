@@ -1,0 +1,57 @@
+{% extends 'general/skeleton.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<div class="login-box">
+  <div class="login-logo">
+    <a href=""><b>CalcAccel</b></a>
+  </div>
+  <div class="card">
+    <div class="card-body login-card-body">
+      <h5 class="login-box-msg mt-3">It's nice to see you again.</h3>
+      <form action="/auth/login" method="POST">
+        <div class="form-group mb-3 mt-3">
+          <label>Username</label>
+          <input type="text" name="username" class="form-control"
+          style="border-left:none; border-right:none; border-top:none">
+        </div>
+        <div class="form-group mb-3">
+          <label>Password</label>
+          <input type="password" name="password" class="form-control"
+          style="border-left:none; border-right:none; border-top:none">
+          <div class="float-right mt-1">
+            <a href="">Forgot your password?</a>
+          </div>
+        </div>
+        <button class="btn btn-primary btn-block" style="margin-top: 25%">Sign in</button>
+      </form>
+      <div class="mt-3" style="text-align: center">
+        {% for message in get_flashed_messages(category_filter=["error"]) %}
+          <div style="color:red"><i class="fa fa-times-circle"></i> Error: {{ message }}</div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+<script>
+
+  const Toast = Swal.mixin({
+    // toast: true,
+    showConfirmButton: false,
+    timer: 2000
+  });
+
+  {% for message in get_flashed_messages(category_filter=["info"]) %}
+  Toast.fire({
+    type: 'success',
+    title: '{{ message }}'
+  })
+  {% endfor %}
+
+</script>
+{% endblock %}

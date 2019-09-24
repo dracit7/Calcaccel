@@ -52,6 +52,7 @@ def register():
   if request.method == "POST":
     username = request.form["username"]
     password = request.form["password"]
+    identity = request.form["identity"]
     db = get_db()
     error = None
 
@@ -69,13 +70,14 @@ def register():
       # the name is available, store it in the database and go to
       # the login page
       db.execute(
-        "INSERT INTO user (username, password) VALUES (?, ?)",
-        (username, generate_password_hash(password)),
+        "INSERT INTO user (username, password, identity) VALUES (?, ?, ?)",
+        (username, generate_password_hash(password), identity)
       )
       db.commit()
+      flash("Register succeeded!", "info")
       return redirect(url_for("auth.login"))
 
-    flash(error)
+    flash(error, "error")
 
   return render_template("auth/register.html")
 
@@ -93,7 +95,7 @@ def login():
     ).fetchone()
 
     if user is None:
-      error = "Incorrect username."
+      error = "No such user."
     elif not check_password_hash(user["password"], password):
       error = "Incorrect password."
 
@@ -103,7 +105,7 @@ def login():
       session["user_id"] = user["id"]
       return redirect(url_for("index"))
 
-    flash(error)
+    flash(error, "error")
 
   return render_template("auth/login.html")
 
