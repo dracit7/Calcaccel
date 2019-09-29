@@ -11,8 +11,12 @@
     
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/AdminLTE-3.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/CalcAccel.css') }}" rel="stylesheet">
     
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
+    {% block style %}{% endblock %}
+
   </head>
 
   <body class="hold-transition sidebar-collapse">
@@ -25,13 +29,10 @@
         <ul class="navbar-nav">
           
           <li class="nav-item">
-            <a class="nav-link"><i class="fa fa-bars"></i></a>
+            <a href="/" class="nav-link"><i class="fa fa-home"></i></a>
           </li>
           <li class="nav-item d-none d-sm-inline-block">
-            <a href="/" class="nav-link">Home</a>
-          </li>
-          <li class="nav-item d-none d-sm-inline-block">
-            <a href="/" class="nav-link">Contact</a>
+            <a href="/survival" class="nav-link">Survival Mode</a>
           </li>
         
         </ul>
@@ -82,6 +83,7 @@
     <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/jquery.form.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/calcaccel.js') }}"></script>
 
     <script src="{{ url_for('static', filename='js/adminlte-3.min.js') }}"></script>
 

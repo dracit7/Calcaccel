@@ -1,6 +1,7 @@
 import os
 
 from flask import Flask
+from flask import render_template
 
 def create_app(test_config=None):
 
@@ -26,8 +27,8 @@ def create_app(test_config=None):
 
   # welcome page
   @app.route('/')
-  def root():
-    return 'Welcome'
+  def index():
+    return render_template("index.html")
 
   # register the database commands
   from calcaccel import db
@@ -36,7 +37,9 @@ def create_app(test_config=None):
 
   # apply the blueprints to the app
   from calcaccel import auth
+  from calcaccel import survival
 
   app.register_blueprint(auth.bp)
+  app.register_blueprint(survival.bp)
 
   return app

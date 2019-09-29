@@ -1,0 +1,104 @@
+
+/* Animation */
+
+.anime-title {
+  position: relative;
+  font-weight: 300;
+  font-size: 6.5em;
+  color: #402d2d;
+  -webkit-text-stroke: 2px white;
+}
+
+.anime-title .text-wrapper {
+  position: relative;
+  display: inline-block;
+  padding-top: 0.1em;
+  padding-right: 0.05em;
+  padding-bottom: 0.15em;
+  line-height: 1em;
+}
+
+.anime-title .line {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  height: 3px;
+  width: 100%;
+  background-color: #402d2d;
+  transform-origin: 0.5 0;
+}
+
+.anime-title .ampersand {
+  font-family: Baskerville, "EB Garamond", serif;
+  font-style: italic;
+  font-weight: 500;
+  width: 1em;
+  margin-right: -0.1em;
+  margin-left: -0.1em;
+}
+
+.anime-title .letters {
+  display: inline-block;
+  opacity: 0;
+}
+
+.anime-option {
+  font-weight: 800;
+  font-size: 5em;
+  font-family: 'Times New Roman', Times, serif;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+}
+
+.anime-option .word {
+  display: inline-block;
+  line-height: 1em;
+}
+
+/* Home page */
+
+.ca-link:link {
+  color: #221818;
+  -webkit-text-stroke: 1px white;
+  text-decoration: none;
+}
+
+.ca-link:active {
+  color: #221818;
+  -webkit-text-stroke: 1px white;
+  text-decoration: none;
+}
+
+.ca-link:visited {
+  color: #221818;
+  -webkit-text-stroke: 1px white;
+  text-decoration: none;
+}
+
+.ca-link:hover {
+  color: #402d2d;
+  font-size: 1.2em;
+  -webkit-text-stroke: 1px white;
+  text-decoration: none;
+}
+
+.timer {
+
+  padding: 5px;
+  height:40px !important;
+  margin-top: 25px;
+
+}
+
+.question {
+
+  text-align: center;
+  font-size: 4em;
+  font-family: 'Times New Roman', Times, serif;
+  font-weight: 900;
+
+  margin-top: 8%;
+
+}

@@ -15,19 +15,18 @@ from calcaccel.db import get_db
 
 bp = Blueprint("auth", __name__, url_prefix="/auth")
 
-
 def login_required(view):
   """View decorator that redirects anonymous users to the login page."""
 
   @functools.wraps(view)
   def wrapped_view(**kwargs):
     if g.user is None:
+      flash("You're required to sign in before accessing this page.", "denied")
       return redirect(url_for("auth.login"))
 
     return view(**kwargs)
 
   return wrapped_view
-
 
 @bp.before_app_request
 def load_logged_in_user():
@@ -70,8 +69,8 @@ def register():
       # the name is available, store it in the database and go to
       # the login page
       db.execute(
-        "INSERT INTO user (username, password, identity) VALUES (?, ?, ?)",
-        (username, generate_password_hash(password), identity)
+        "INSERT INTO user (username, password, identity, maxgrade) VALUES (?, ?, ?, ?)",
+        (username, generate_password_hash(password), identity, 0)
       )
       db.commit()
       flash("Register succeeded!", "info")
@@ -103,7 +102,7 @@ def login():
       # store the user id in a new session and return to the index
       session.clear()
       session["user_id"] = user["id"]
-      return redirect(url_for("index"))
+      return redirect(url_for("survival.index"))
 
     flash(error, "error")
 
@@ -114,4 +113,4 @@ def login():
 def logout():
   """Clear the current session, including the stored user id."""
   session.clear()
-  return redirect(url_for("index"))
+  return redirect(url_for("auth.login"))

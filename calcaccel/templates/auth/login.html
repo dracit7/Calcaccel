@@ -53,5 +53,12 @@
   })
   {% endfor %}
 
+  {% for message in get_flashed_messages(category_filter=["denied"]) %}
+  Toast.fire({
+    type: 'warning',
+    title: '{{ message }}'
+  })
+  {% endfor %}
+
 </script>
 {% endblock %}
