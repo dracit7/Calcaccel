@@ -6,11 +6,21 @@
 <div class="card">
   <div class="card-body">
     <div style="text-align: center">
+      <div class="scoreboard">
+        Score : <span id="score">0</span>
+      </div>
+    </div>
+    <div style="text-align: center">
       <div style="width:50%; margin-left:25%">
         <div class="progress progress timer">
           <div class="progress-bar bg-success" role="progressbar"
           style="width: 25%" id="timer" value="30">
-            <span style="font-size: 180%; font-weight: 900" id="time">30s</span>
+            <span>
+              <span style="font-size: 180%; font-weight: 900" id="time">
+                30s
+              </span>
+              <span style="font-size: 180%; font-weight: 900" id="time-control"></span>
+            </span>
           </div>
         </div>
       </div>
@@ -31,6 +41,8 @@
 {% endblock %}
 
 {% block scripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.2/anime.min.js"></script>
+
 <script>
 
   window.addEventListener("keydown", getKeyboardInput);

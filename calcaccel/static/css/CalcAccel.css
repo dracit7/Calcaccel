@@ -99,6 +99,16 @@
   font-family: 'Times New Roman', Times, serif;
   font-weight: 900;
 
-  margin-top: 8%;
+  margin-top: 5%;
+
+}
+
+.scoreboard {
+
+  font-family: Baskerville, "EB Garamond", serif;
+  font-size: 300%;
+  font-weight: 900;
+  color: #007bff;
+  -webkit-text-stroke: 2px #3191f7;
 
 }
