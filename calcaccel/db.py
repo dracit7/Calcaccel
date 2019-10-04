@@ -82,9 +82,12 @@ def del_db(username):
 def query(query, args=(), fetchone=False):
     try:
         cur = get_db().execute(query, args)
-        rv = cur.fetchall()
+        if fetchone:
+            rv = cur.fetchone()
+        else:
+            rv = cur.fetchall()
         cur.close()
-        return (rv[0] if rv else None) if fetchone else rv
+        return rv
     except:
         return None
 

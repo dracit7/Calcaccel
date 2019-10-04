@@ -1,96 +1,100 @@
 <!doctype html>
 
 <html>
-  
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    
-    <title>CalcAccel - {% block title %}{% endblock %}</title>
-    
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <link href="{{ url_for('static', filename='css/AdminLTE-3.min.css') }}" rel="stylesheet">
-    <link href="{{ url_for('static', filename='css/CalcAccel.css') }}" rel="stylesheet">
-    
-    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 
-    {% block style %}{% endblock %}
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-  </head>
+  <title>CalcAccel - {% block title %}{% endblock %}</title>
 
-  <body class="hold-transition sidebar-collapse">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href="{{ url_for('static', filename='css/AdminLTE-3.min.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='css/CalcAccel.css') }}" rel="stylesheet">
 
-    <div class="wrapper">
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 
-      <!-- Navigation bar -->
-      <nav class="main-header navbar navbar-expand navbar-dark navbar-light">
+  {% block style %}{% endblock %}
 
-        <ul class="navbar-nav">
-          
-          <li class="nav-item">
-            <a href="/" class="nav-link"><i class="fa fa-home"></i></a>
-          </li>
-          <li class="nav-item d-none d-sm-inline-block">
-            <a href="/survival" class="nav-link">Survival Mode</a>
-          </li>
-        
-        </ul>
+</head>
 
-        <ul class="navbar-nav ml-auto">
+<body class="hold-transition sidebar-collapse">
 
-          {% if g.user %}
-          <li class="nav-item float-right d-none d-sm-inline-block">
-            <a href="{{ url_for('auth.logout') }}" class="nav-link">Log out</a>
-          </li>
-          {% else %}
-          <li class="nav-item float-right d-none d-sm-inline-block">
-            <a href="{{ url_for('auth.register') }}" class="nav-link">Register</a>
-          </li>
-          <li class="nav-item float-right d-none d-sm-inline-block">
-            <a href="{{ url_for('auth.login') }}" class="nav-link">Log in</a>
-          </li>
-          {% endif %}
+  <div class="wrapper">
 
-        </ul>
-      
-      </nav>
+    <!-- Navigation bar -->
+    <nav class="main-header navbar navbar-expand navbar-dark navbar-light">
 
-      <div class="content-wrapper">
+      <ul class="navbar-nav">
 
-        <section class="content-header">{% block header %}{% endblock %}</section>
+        <li class="nav-item">
+          <a href="/" class="nav-link"><i class="fa fa-home"></i></a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+          <a href="/survival" class="nav-link">Survival Mode</a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+          <a href="/dual" class="nav-link">Dual Mode</a>
+        </li>
 
-        <section class="content">
-          {% block content %}{% endblock %}
-        </section>
+      </ul>
 
-        <div class="control-sidebar-bg"></div>
-        
-      </div>
+      <ul class="navbar-nav ml-auto">
 
-      <footer class="main-footer">
-        {% block footer %}
-        <strong style="margin-left: 2em">
-          Author: <a href="https://github.com/dracit7">Drac Zhang</a>
-          & <a href="https://github.com/MrConnorKenway">Mr.ConnorKenway</a>
-        </strong>
-        <div class="float-right d-none d-sm-inline-block">Beta</div>
-        {% endblock %}
-      </footer>
+        {% if g.user %}
+        <li class="nav-item float-right d-none d-sm-inline-block">
+          <a href="{{ url_for('auth.logout') }}" class="nav-link">Log out</a>
+        </li>
+        {% else %}
+        <li class="nav-item float-right d-none d-sm-inline-block">
+          <a href="{{ url_for('auth.register') }}" class="nav-link">Register</a>
+        </li>
+        <li class="nav-item float-right d-none d-sm-inline-block">
+          <a href="{{ url_for('auth.login') }}" class="nav-link">Log in</a>
+        </li>
+        {% endif %}
+
+      </ul>
+
+    </nav>
+
+    <div class="content-wrapper">
+
+      <section class="content-header">{% block header %}{% endblock %}</section>
+
+      <section class="content">
+        {% block content %}{% endblock %}
+      </section>
+
+      <div class="control-sidebar-bg"></div>
 
     </div>
 
-    <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/jquery.form.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/calcaccel.js') }}"></script>
+    <footer class="main-footer">
+      {% block footer %}
+      <strong style="margin-left: 2em">
+        Author: <a href="https://github.com/dracit7">Drac Zhang</a>
+        & <a href="https://github.com/MrConnorKenway">Mr.ConnorKenway</a>
+      </strong>
+      <div class="float-right d-none d-sm-inline-block">Beta</div>
+      {% endblock %}
+    </footer>
 
-    <script src="{{ url_for('static', filename='js/adminlte-3.min.js') }}"></script>
+  </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+  <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/jquery.form.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/calcaccel.js') }}"></script>
 
-    {% block scripts %}{% endblock %}
-    
-  </body>
+  <script src="{{ url_for('static', filename='js/adminlte-3.min.js') }}"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+
+  {% block scripts %}{% endblock %}
+
+</body>
 
 </html>
