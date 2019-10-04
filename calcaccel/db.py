@@ -57,18 +57,46 @@ def init_app(app):
 
 
 def list_db():
-    conn = sqlite3.connect('../instance/calcaccel.sqlite')
-    c = conn.cursor()
-    c.execute("SELECT * FROM user")
-    for row in c:
-        print(row)
+    try:
+        conn = sqlite3.connect('../instance/calcaccel.sqlite')
+        c = conn.cursor()
+        c.execute("SELECT * FROM user")
+        for row in c:
+            print(row)
+        return True
+    except:
+        return False
 
 
-def del_db(id):
-    conn = sqlite3.connect('../instance/calcaccel.sqlite')
-    c = conn.cursor()
-    c.execute("DELETE FROM user WHERE id = %d" % id)
-    conn.commit()
+def del_db(username):
+    try:
+        conn = sqlite3.connect('../instance/calcaccel.sqlite')
+        c = conn.cursor()
+        c.execute("DELETE FROM user WHERE id = ?", username)
+        conn.commit()
+        return True
+    except:
+        return False
+
+
+def query(query, args=(), fetchone=False):
+    try:
+        cur = get_db().execute(query, args)
+        rv = cur.fetchall()
+        cur.close()
+        return (rv[0] if rv else None) if fetchone else rv
+    except:
+        return None
+
+
+def execute(query, args=()):
+    try:
+        db = get_db()
+        db.cursor().execute(query, args)
+        db.commit()
+        return True
+    except:
+        return False
 
 
 if __name__ == '__main__':

@@ -11,7 +11,7 @@ from flask import url_for
 from werkzeug.security import check_password_hash
 from werkzeug.security import generate_password_hash
 
-from calcaccel.db import get_db
+from calcaccel.db import query, execute
 from calcaccel.auth import login_required
 
 bp = Blueprint("survival", __name__, url_prefix="/survival")
@@ -21,20 +21,20 @@ bp = Blueprint("survival", __name__, url_prefix="/survival")
 @login_required
 def index():
     """Index page of survival mode."""
-    db = get_db()
-
-    you = db.execute(
+    you = query(
         "SELECT * FROM user"
         " WHERE id = ?",
-        (session["user_id"],)
-    ).fetchone()
+        session["user_id"],
+        fetchone=True
+    )
 
-    users = db.execute(
+    users = query(
         "SELECT username, maxgrade FROM user"
         " WHERE identity = ?"
         " ORDER BY maxgrade DESC",
-        ("child",)
-    ).fetchall()
+        "child",
+        fetchone=False
+    )
 
     return render_template("survival/index.html", users=users, you=you)
 
@@ -50,13 +50,10 @@ def play():
 @login_required
 def score():
     """Send score back to backend"""
-    db = get_db()
-
     score = request.form["score"]
     user_id = session["user_id"]
-    maxgrade = db.execute(
-        "SELECT maxgrade FROM user WHERE id = ?", (user_id)).fetchone()
+    maxgrade = query(
+        "SELECT maxgrade FROM user WHERE id = ?", user_id, fetchone=True)
     if maxgrade < score:
-        db.execute("UPDATE user SET maxgrade = ? WHERE username = ?",
-                   (score, user_id))
-        db.commit()
+        execute("UPDATE user SET maxgrade = ? WHERE username = ?",
+                (score, user_id))
