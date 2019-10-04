@@ -38,8 +38,10 @@ def create_app(test_config=None):
   # apply the blueprints to the app
   from calcaccel import auth
   from calcaccel import survival
+  from calcaccel import admin
 
   app.register_blueprint(auth.bp)
   app.register_blueprint(survival.bp)
+  app.register_blueprint(admin.bp)
 
   return app

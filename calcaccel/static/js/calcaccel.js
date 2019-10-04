@@ -1,4 +1,8 @@
 
+/* Global vars */
+
+var swalswitch = 1;
+
 /*
  * Helper functions
  */
@@ -33,17 +37,49 @@ function sub1s() {
 
   var timenow = $('#timer').attr("value"); // use a int to store the time rest.
   var width = parseFloat(timenow) * 100 / 120; // Parse the time to a percentage.
-  
+
+  const Toast = Swal.mixin({
+    showConfirmButton: true,
+    showCancelButton: true,
+    animation: true,
+    allowOutsideClick: false,
+    allowEscapeKey: false,
+    allowEnterKey: false,
+  });
+
   // If there's no time left, game over
   if (parseInt(timenow, 10) <= 0) {
-    alert('Game over!');
-    window.location.assign('/survival');
+    if (swalswitch == 1) {
+
+      var scorePost = new XMLHttpRequest();
+      if (scorePost == null) {
+        alert('Your browser does not support XMLHttpRequest, please update your browser.');
+      } else {
+        scorePost.open("POST", "/survival/score");
+        scorePost.send(getScore());
+      }
+
+      Toast.fire({
+        type: "info",
+        titleText: "Game over!",
+        html: "<p>Your Total score is <span class='score'>" + $('#score').text() + "</span> !</p>",
+        confirmButtonText: "View scoreboard",
+        preConfirm: () => {
+          return window.location.replace("/survival/scoreboard");
+        },
+        cancelButtonText: "One more play",
+        preCancel: () => {
+          return window.location.reload();
+        }
+      });
+    }
+    swalswitch = 0;
   }
 
   // Update the timer progress bar
-  $('#timer').css("width", width.toString()+"%");
-  $('#timer').attr("value", (parseInt(timenow, 10)-1).toString());
-  $('#time').text((parseInt(timenow, 10)).toString()+"s");
+  $('#timer').css("width", width.toString() + "%");
+  $('#timer').attr("value", (parseInt(timenow, 10) - 1).toString());
+  $('#time').text((parseInt(timenow, 10)).toString() + "s");
 
   checkprogress();
 
@@ -56,15 +92,15 @@ function plusxs(x) {
 
   var timenow = $('#timer').attr("value"); // use a int to store the time rest.
   var width = parseFloat(timenow) * 100 / 120; // Parse the time to a percentage.
-  
+
   // Update the timer progress bar
-  $('#timer').css("width", width.toString()+"%");
-  $('#timer').attr("value", (parseInt(timenow, 10)+x).toString());
-  $('#time').text((parseInt(timenow, 10)).toString()+"s");
+  $('#timer').css("width", width.toString() + "%");
+  $('#timer').attr("value", (parseInt(timenow, 10) + x).toString());
+  $('#time').text((parseInt(timenow, 10)).toString() + "s");
 
   checkprogress();
 
-  $('#time-control').text("+"+x.toString()+"s");
+  $('#time-control').text("+" + x.toString() + "s");
 
 }
 
@@ -142,13 +178,13 @@ function calculate(a, b, ope) {
 
   switch (ope) {
     case "+":
-      return a+b;
+      return a + b;
     case "-":
-      return a-b;
+      return a - b;
     case "*":
-      return a*b;
+      return a * b;
     case "/":
-      return a/b;
+      return a / b;
   }
 
 }
@@ -241,7 +277,7 @@ function init_quiz(rank) {
       $('#operand-r').text(ope_r.toString());
       $('#operator').text(ope);
       break;
- 
+
   }
 
   $('#operand-l').text()
@@ -262,14 +298,14 @@ function incscore(credit) {
 
   // Animation
   anime.timeline()
-  .add({
-    targets: '#score',
-    opacity: [0,1],
-    fontSize: ['150%', '100%'],
-    easing: "easeInOutCirc",
-    duration: 500,
-    delay: 0,
-  });
+    .add({
+      targets: '#score',
+      opacity: [0, 1],
+      fontSize: ['150%', '100%'],
+      easing: "easeInOutCirc",
+      duration: 500,
+      delay: 0,
+    });
 
 }
 
@@ -277,13 +313,6 @@ function incscore(credit) {
 function getKeyboardInput(eve) {
 
   var keynum = window.event ? eve.keyCode : eve.which;
-
-  const Toast = Swal.mixin({
-    toast: true,
-    showConfirmButton: false,
-    animation: false,
-    timer: 500
-  })
 
   /*
    * Enter:     13
@@ -309,10 +338,10 @@ function getKeyboardInput(eve) {
             plusxs(3);
             break;
         }
-        
+
         // Clear input buffer
         $("#input").text("");
-        
+
         // Score
         incscore(1);
 
@@ -323,7 +352,7 @@ function getKeyboardInput(eve) {
           sub1s();
         }
         $("#input").text("");
-        $('#time-control').text("-"+getRank().toString()+"s");
+        $('#time-control').text("-" + getRank().toString() + "s");
 
       }
 

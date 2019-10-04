@@ -112,3 +112,11 @@
   -webkit-text-stroke: 2px #3191f7;
 
 }
+
+.score {
+
+  font-size: 1.5em;
+  font-weight: 900;
+  color: #007bff;
+
+}
