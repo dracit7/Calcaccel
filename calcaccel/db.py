@@ -58,7 +58,7 @@ def init_app(app):
 
 def list_db():
     try:
-        conn = sqlite3.connect('../instance/calcaccel.sqlite')
+        conn = get_db()
         c = conn.cursor()
         c.execute("SELECT * FROM user")
         for row in c:
@@ -70,7 +70,7 @@ def list_db():
 
 def del_db(username):
     try:
-        conn = sqlite3.connect('../instance/calcaccel.sqlite')
+        conn = get_db()
         c = conn.cursor()
         c.execute("DELETE FROM user WHERE id = ?", username)
         conn.commit()
