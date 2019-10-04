@@ -1,10 +1,13 @@
+from calcaccel import admin
+from calcaccel import survival
+from calcaccel import auth
+from calcaccel import db
 import os
 
 from flask import Flask
 from flask import render_template
 
 def create_app(test_config=None):
-
   # create and configure the app
   app = Flask(__name__, instance_relative_config=True)
   app.config.from_mapping(
@@ -38,10 +41,12 @@ def create_app(test_config=None):
   # apply the blueprints to the app
   from calcaccel import auth
   from calcaccel import survival
+  from calcaccel import dual
   from calcaccel import admin
 
   app.register_blueprint(auth.bp)
   app.register_blueprint(survival.bp)
+  app.register_blueprint(dual.bp)
   app.register_blueprint(admin.bp)
 
   return app

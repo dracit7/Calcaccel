@@ -52,11 +52,13 @@ function sub1s() {
     if (swalswitch == 1) {
 
       var scorePost = new XMLHttpRequest();
+      var form = new FormData();
       if (scorePost == null) {
         alert('Your browser does not support XMLHttpRequest, please update your browser.');
       } else {
         scorePost.open("POST", "/survival/score");
-        scorePost.send(getScore());
+        form.append("score", getScore())
+        scorePost.send(form);
       }
 
       Toast.fire({

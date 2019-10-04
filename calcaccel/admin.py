@@ -13,6 +13,7 @@ from werkzeug.security import generate_password_hash
 
 bp = Blueprint("admin", __name__, url_prefix="/admin")
 
+
 def admin_required(view):
   """Only admin user could visit sites with @admin_required."""
 

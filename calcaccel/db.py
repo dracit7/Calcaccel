@@ -6,11 +6,14 @@ from flask import current_app
 from flask import g
 from flask import request
 from flask.cli import with_appcontext
+from flask.cli import with_appcontext
+from werkzeug.security import generate_password_hash
 
 from calcaccel.admin import bp
 from calcaccel.admin import admin_required
 
 import argparse
+
 
 def get_db():
   """Connect to the application's configured database. The connection
@@ -19,7 +22,7 @@ def get_db():
   """
   if "db" not in g:
     g.db = sqlite3.connect(
-      current_app.config["DATABASE"], detect_types=sqlite3.PARSE_DECLTYPES
+        current_app.config["DATABASE"], detect_types=sqlite3.PARSE_DECLTYPES
     )
     g.db.row_factory = sqlite3.Row
 
@@ -42,6 +45,12 @@ def init_db():
 
   with current_app.open_resource("schema.sql") as f:
     db.executescript(f.read().decode("utf8"))
+  
+  db.execute(
+    "INSERT INTO user (username, password, identity, maxgrade) VALUES (?, ?, ?, ?)",
+    ("admin", generate_password_hash("dlcqtql"), "admin", 9999)
+  )
+  db.commit()
 
 
 @click.command("init-db")
@@ -59,35 +68,53 @@ def init_app(app):
   app.teardown_appcontext(close_db)
   app.cli.add_command(init_db_command)
 
+
 @bp.route("/listdb")
-# @admin_required
+@admin_required
 def list_db():
-  conn = sqlite3.connect('../instance/calcaccel.sqlite')
-  c = conn.cursor()
-  c.execute("SELECT * FROM user")
-  print(c)
-  return c
+  try:
+    users = ""
+    c = get_db().cursor()
+    c.execute("SELECT * FROM user")
+    for user in c:
+      users += str(tuple(user))+"<br>"
+    return users
+  except Exception as err:
+    return str(err)
+
 
 @bp.route("/deldb")
-# @admin_required
-def del_db(id):
-  conn = sqlite3.connect('../instance/calcaccel.sqlite')
-  c = conn.cursor()
-  c.execute("DELETE FROM user WHERE id = %d" % id)
-  conn.commit()
+@admin_required
+def del_db():
+  try:
+    username = request.args["usr"]
+    conn = get_db()
+    c = conn.cursor()
+    c.execute("DELETE FROM user WHERE username = ?", (username,))
+    conn.commit()
+    return "Deleted %s successfully" % (username)
+  except Exception as err:
+    return str(err)
 
 
-if __name__ == '__main__':
-  parser = argparse.ArgumentParser(description='Utils for processing database.')
-  parser.add_argument(
-    '--list',
-    action='store_true',
-    help='list all the item in the database'
-  )
-  parser.add_argument('--delete', action='store', dest='id', type=int,
-    help='delete an item by its id')
-  args = parser.parse_args()
-  if args.list:
-    list_db()
-  if args.id != None:
-    del_db(args.id)
+def query(query, args=(), fetchone=False):
+  try:
+    cur = get_db().execute(query, args)
+    if fetchone:
+      rv = cur.fetchone()
+    else:
+      rv = cur.fetchall()
+    cur.close()
+    return rv
+  except:
+    return None
+
+
+def execute(query, args=()):
+  try:
+    db = get_db()
+    db.cursor().execute(query, args)
+    db.commit()
+    return True
+  except:
+    return False
