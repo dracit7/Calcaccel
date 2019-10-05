@@ -8,6 +8,8 @@ from flask import session
 from calcaccel.db import query, execute
 from calcaccel.auth import login_required
 
+import time
+
 bp = Blueprint("dual", __name__, url_prefix="/dual")
 
 
@@ -38,8 +40,8 @@ def index():
 
         if error is None:
             session["peer_id"] = peer["id"]
-            execute("INSERT INTO runtime_data (id, score, timeleft, playing) VALUES (?,?,?,?)",
-                    (you["id"], 0, 0, 1))
+            execute("INSERT INTO runtime_data (id, score, timeleft, currenttime) VALUES (?, ?, ?, ?)",
+                    (you["id"], 0, 0, int(time.time())))
             return redirect("/dual/play?player=1")
 
     return render_template("dual/index.html")
@@ -58,15 +60,16 @@ def message():
     if request.method == "POST":
         score = request.form["score"]
         timeleft = request.form["timeleft"]
-        execute("UPDATE runtime_data SET (score, timeleft) = (?, ?) WHERE id = ?",
-                (score, timeleft, session["user_id"]))
+        execute("UPDATE runtime_data SET (score, timeleft, currenttime) = (?, ?, ?) WHERE id = ?",
+                (score, timeleft, int(time.time()), session["user_id"]))
 
     if request.method == "GET":
-        _, score, timeleft, playing = query("SELECT * FROM runtime_data WHERE id = ?",
-                                            (session["peer_id"],),
-                                            fetchone=True)
+        _, score, timeleft, currenttime = query("SELECT * FROM runtime_data WHERE id = ?",
+                                                (session["peer_id"],),
+                                                fetchone=True)
         request.form["score"] = score
-        if playing == 0:
+        if currenttime + 2 < int(time.time()):
+            # TODO: config time interval
             request.form["timeleft"] = -1
         else:
             request.form["timeleft"] = timeleft

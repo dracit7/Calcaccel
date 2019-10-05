@@ -15,5 +15,5 @@ CREATE TABLE runtime_data
     id       INTEGER PRIMARY KEY AUTOINCREMENT,
     score    INTEGER NOT NULL,
     timeleft INTEGER NOT NULL,
-    playing BOOLEAN NOT NULL
+    currenttime INTEGER NOT NULL
 );
