@@ -1,4 +1,5 @@
 DROP TABLE IF EXISTS user;
+DROP TABLE IF EXISTS runtime_data;
 
 CREATE TABLE user
 (
