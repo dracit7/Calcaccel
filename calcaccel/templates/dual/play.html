@@ -3,51 +3,93 @@
 {% block title %}Dual Mode{% endblock %}
 
 {% block content %}
-    <div class="card">
-        <div class="card-body">
-            <div style="text-align: center">
-                <div class="scoreboard">
-                    Score : <span id="score">0</span>
-                </div>
-            </div>
-            <div style="text-align: center">
-                <div style="width:50%; margin-left:25%">
-                    <div class="progress progress timer">
-                        <div class="progress-bar bg-success" role="progressbar" style="width: 25%" id="timer"
-                             value="30">
-            <span>
-              <span style="font-size: 180%; font-weight: 900" id="time">
-                30s
-              </span>
-              <span style="font-size: 180%; font-weight: 900" id="time-control"></span>
-            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div style="text-align: center">
-                <div class="question">
-                    <span id="operand-l">1</span>
-                    <span id="operator">+</span>
-                    <span id="operand-r">1</span>
-                    = <span id="result">?</span>
-                </div>
-                <div>
-                    <span id="input"></span>
-                </div>
-            </div>
-        </div>
-    </div>
+<div class="row">
+	<div class="col-md-6">
+		<div class="card card-primary">
+			<div class="card-header" style="text-align: center">
+				<h3 class="card-title">{{ g.user["username"] }}</h3>
+			</div>
+			<div class="card-body">
+				<div style="text-align: center">
+					<div class="scoreboard">
+						Score : <span id="score">0</span>
+					</div>
+				</div>
+				<div style="text-align: center">
+					<div style="width:70%; margin-left:15%">
+						<div class="progress progress timer">
+							<div class="progress-bar bg-success" role="progressbar" style="width: 25%" id="timer" value="30">
+								<span>
+									<span style="font-size: 180%; font-weight: 900" id="time">
+										30s
+									</span>
+									<span style="font-size: 180%; font-weight: 900" id="time-control"></span>
+								</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div style="text-align: center">
+					<div class="question">
+						<span id="operand-l">1</span>
+						<span id="operator">+</span>
+						<span id="operand-r">1</span>
+						= <span id="result">?</span>
+					</div>
+					<div>
+						<span id="input"></span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-6">
+		<div class="card card-danger">
+			<div class="card-header" style="text-align: center">
+				<h3 class="card-title">{{ peer }}</h3>
+			</div>
+			<div class="card-body">
+				<div style="text-align: center">
+					<div class="scoreboard">
+						Score : <span id="peer-score">0</span>
+					</div>
+				</div>
+				<div style="text-align: center">
+					<div style="width:70%; margin-left:15%">
+						<div class="progress progress timer">
+							<div class="progress-bar bg-success" role="progressbar" style="width: 25%" id="timer" value="30">
+								<span>
+									<span style="font-size: 180%; font-weight: 900" id="peer-time">
+										30s
+									</span>
+								</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div style="text-align: center">
+					<div class="question" id="peer-question">
+						Waiting for your opponent...
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
 {% endblock %}
 
 {% block scripts %}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.2/anime.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.2/anime.min.js"></script>
 
-    <script>
+<script>
 
-        window.addEventListener("keydown", getKeyboardInput);
+	window.addEventListener("keydown", getKeyboardInput);
 
-        setInterval(sub1s, 1000);
+	waitPeer();
 
-    </script>
+	setInterval(sendState, 1000);
+	setInterval(getPeerState, 1000);
+
+</script>
 {% endblock %}

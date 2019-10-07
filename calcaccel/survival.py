@@ -52,18 +52,17 @@ def score():
   user_id = session["user_id"]
 
   maxgrade = query(
-    "SELECT maxgrade FROM user WHERE id = ?",
-    (user_id, ),
-    fetchone=True
+      "SELECT maxgrade FROM user WHERE id = ?",
+      (user_id, ),
+      fetchone=True
   )
 
   if query != None:
     mg, = tuple(maxgrade)
     if mg < score:
       execute(
-        "UPDATE user SET maxgrade = ? WHERE id = ?",
-        (score, user_id)
+          "UPDATE user SET maxgrade = ? WHERE id = ?",
+          (score, user_id)
       )
-
 
   return ""

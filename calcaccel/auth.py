@@ -73,8 +73,8 @@ def register():
       # the name is available, store it in the database and go to
       # the login page
       db.execute(
-        "INSERT INTO user (username, password, identity, maxgrade) VALUES (?, ?, ?, ?)",
-        (username, generate_password_hash(password), identity, 0)
+          "INSERT INTO user (username, password, identity, maxgrade) VALUES (?, ?, ?, ?)",
+          (username, generate_password_hash(password), identity, 0)
       )
       db.commit()
       flash("Register succeeded!", "info")

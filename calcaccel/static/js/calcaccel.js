@@ -28,7 +28,7 @@ function getRank() {
 }
 
 /*
- * Main functions
+ * Survival mode (some are global) functions
  */
 
 // Call this function one time per second to implement a timer.
@@ -77,6 +77,22 @@ function sub1s() {
     }
     swalswitch = 0;
   }
+
+  // Update the timer progress bar
+  $('#timer').css("width", width.toString() + "%");
+  $('#timer').attr("value", (parseInt(timenow, 10) - 1).toString());
+  $('#time').text((parseInt(timenow, 10)).toString() + "s");
+
+  checkprogress();
+
+  $('#time-control').text("");
+
+}
+
+function sub1sSafe() {
+
+  var timenow = $('#timer').attr("value"); // use a int to store the time rest.
+  var width = parseFloat(timenow) * 100 / 120; // Parse the time to a percentage.
 
   // Update the timer progress bar
   $('#timer').css("width", width.toString() + "%");
@@ -351,7 +367,7 @@ function getKeyboardInput(eve) {
 
         // Elsewise, decrease time
         for (let i = 0; i < getRank(); i++) {
-          sub1s();
+          sub1sSafe();
         }
         $("#input").text("");
         $('#time-control').text("-" + getRank().toString() + "s");
@@ -400,5 +416,56 @@ function getKeyboardInput(eve) {
       $('#input').text($('#input').text() + "9");
       break;
   }
+
+}
+
+/*
+ * Dual mode functions
+ */
+
+// Get peer's state from /dual/message
+function getPeerState() {
+
+  var req = new XMLHttpRequest();
+  if (req == null) {
+    alert('Your browser does not support XMLHttpRequest, please update your browser.');
+    return -1;
+  }
+
+  req.open('GET', '/dual/message');
+  req.send();
+  if (req.responseText == "") {
+    $('#peer-question').text("Waiting for your opponent...");
+    return 0;
+  } else {
+    alert(req.responseText);
+    return 1;
+  }
+
+}
+
+// Send state to peer and sub1s
+function sendState() {
+
+  var timenow = $('#timer').attr("value"); // use a int to store the time rest.
+  var width = parseFloat(timenow) * 100 / 120; // Parse the time to a percentage.
+
+  // Update the timer progress bar
+  $('#timer').css("width", width.toString() + "%");
+  $('#timer').attr("value", (parseInt(timenow, 10) - 1).toString());
+  $('#time').text((parseInt(timenow, 10)).toString() + "s");
+
+  checkprogress();
+
+  $('#time-control').text("");
+
+  var req = new XMLHttpRequest();
+  if (req == null) {
+    alert('Your browser does not support XMLHttpRequest, please update your browser.');
+    return -1;
+  }
+
+  req.open('POST', '/dual/message');
+  req.send("score=" + getScore().toString() + "&timeleft=" + getTime().toString());
 
 }
