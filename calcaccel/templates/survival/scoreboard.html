@@ -1,0 +1,41 @@
+{% extends 'general/skeleton.html' %}
+
+{% block title %}Survival Mode{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-md-4"></div>
+  <div class="col-md-4">
+    <div class="card card-danger">
+      <div class="card-header"></div>
+      <div class="card-body">
+        <div class="ribbon-wrapper ribbon-xl">
+          <div class="ribbon bg-warning" style="font-size: 1.4em">SCOREBOARD</div>
+        </div>
+        <div style="text-align: center">
+          <table class="table table-rank">
+            {% for user in users %}
+            <tr>
+              <td width="25%">{{ user['maxgrade'] }}</td>
+              <td width="50%">{{ user['username'] }}</td>
+              <td width="25%">{{ user['maxgrade'] }}</td>
+            </tr>
+            {% endfor %}
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4"></div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+</script>
+{% endblock %}

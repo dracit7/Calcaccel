@@ -120,3 +120,14 @@
   color: #007bff;
 
 }
+
+.table-rank {
+
+  font-size: 1.8em;
+  font-weight: 500;
+  -webkit-text-stroke: 1px #2e2828;
+
+  padding-top: 0 !important;
+  margin: 0 !important;
+
+}

@@ -23,14 +23,14 @@ def scoreboard():
   you = query(
       "SELECT * FROM user"
       " WHERE id = ?",
-      session["user_id"],
+      (session["user_id"],),
       fetchone=True
   )
   users = query(
       "SELECT username, maxgrade FROM user"
       " WHERE identity = ?"
       " ORDER BY maxgrade DESC",
-      "child",
+      ("child",),
       fetchone=False
   )
   return render_template("survival/scoreboard.html", users=users, you=you)
