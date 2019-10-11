@@ -9,6 +9,7 @@ from calcaccel.db import query, execute
 from calcaccel.auth import login_required
 
 import time
+import json
 
 bp = Blueprint("dual", __name__, url_prefix="/dual")
 
@@ -69,24 +70,37 @@ def message():
             "UPDATE runtime_data SET (score, timeleft, currenttime) = (?, ?, ?) WHERE id = ?",
             (score, timeleft, int(time.time()), session["user_id"])
         )
+        return ""
 
     if request.method == "GET":
+        msg = {}
         peer = query(
             "SELECT * FROM runtime_data WHERE id = ?",
             (session["peer_id"],),
             fetchone=True
         )
         if peer == None:
-            return ""
+            msg["score"] = -1 # score == -1 means that front-end should not change the score.
+            msg["timeleft"] = -1
+            return json.dumps(msg)
         _, score, timeleft, currenttime = peer
-        request.form["score"] = score
-        if currenttime + 2 < int(time.time()):
+        msg["score"] = score
+        if currenttime + 5 < int(time.time()):
             # TODO: config time interval
-            request.form["timeleft"] = -1
+            msg["timeleft"] = -1
             execute(
                 "DELETE FROM runtime_data WHERE id = ?",
                 (session["peer_id"], )
             )
         else:
-            request.form["timeleft"] = timeleft
-        return request.form
+            msg["timeleft"] = timeleft
+        return json.dumps(msg)
+
+@bp.route("/settlement", methods=["POST"])
+@login_required
+def settlement():
+    execute(
+        "DELETE FROM runtime_data WHERE id = ?",
+        (session["user_id"], )
+    )
+    return ""

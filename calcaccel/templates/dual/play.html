@@ -57,7 +57,7 @@
 				<div style="text-align: center">
 					<div style="width:70%; margin-left:15%">
 						<div class="progress progress timer">
-							<div class="progress-bar bg-success" role="progressbar" style="width: 25%" id="timer" value="30">
+							<div class="progress-bar bg-success" role="progressbar" style="width: 25%" id="peer-timer" value="30">
 								<span>
 									<span style="font-size: 180%; font-weight: 900" id="peer-time">
 										30s
@@ -69,7 +69,7 @@
 				</div>
 				<div style="text-align: center">
 					<div class="question" id="peer-question">
-						Waiting for your opponent...
+						***
 					</div>
 				</div>
 			</div>
@@ -86,10 +86,8 @@
 
 	window.addEventListener("keydown", getKeyboardInput);
 
-	waitPeer();
-
-	setInterval(sendState, 1000);
-	setInterval(getPeerState, 1000);
+	var sendHandler = setInterval(sendState, 1000);
+	var getHandler = setInterval(getPeerState, 1000);
 
 </script>
 {% endblock %}

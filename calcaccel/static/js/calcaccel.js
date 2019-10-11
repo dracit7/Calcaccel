@@ -40,7 +40,6 @@ function sub1s() {
 
   const Toast = Swal.mixin({
     showConfirmButton: true,
-    showCancelButton: true,
     animation: true,
     allowOutsideClick: false,
     allowEscapeKey: false,
@@ -69,10 +68,6 @@ function sub1s() {
         preConfirm: () => {
           return window.location.replace("/survival/scoreboard");
         },
-        cancelButtonText: "One more play",
-        preCancel: () => {
-          return window.location.reload();
-        }
       });
     }
     swalswitch = 0;
@@ -432,15 +427,43 @@ function getPeerState() {
     return -1;
   }
 
+  req.onreadystatechange = function () {
+    if (req.responseText != "") {
+
+      var form = JSON.parse(req.responseText);
+      var width = parseFloat(form.timeleft) * 100 / 120;
+
+      if (form.score == -1) {
+        form.score = $('#peer-score').text();
+      }
+
+      $('#peer-time').text(form.timeleft + "s");
+      $('#peer-timer').css("width", width.toString() + "%");
+      $('#peer-timer').attr("value", form.timeleft);
+      $('#peer-score').text(form.score);
+
+      if (form.timeleft < 0 && getTime() < 0) {
+        if (getScore() > form.score)
+          settlement("win");
+        else if (getScore() == form.score)
+          settlement("draw");
+        else
+          settlement("lose");
+      } else if (form.timeleft < 0 && getTime() > 0) {
+        if (getScore() > form.score) {
+          settlement("win");
+        }
+      } else if (form.timeleft > 0 && getTime() < 0) {
+        if (getScore() < form.score) {
+          settlement("lose");
+        }
+      }
+
+    }
+  }
+
   req.open('GET', '/dual/message');
   req.send();
-  if (req.responseText == "") {
-    $('#peer-question').text("Waiting for your opponent...");
-    return 0;
-  } else {
-    alert(req.responseText);
-    return 1;
-  }
 
 }
 
@@ -460,12 +483,71 @@ function sendState() {
   $('#time-control').text("");
 
   var req = new XMLHttpRequest();
+  var form = new FormData();
   if (req == null) {
     alert('Your browser does not support XMLHttpRequest, please update your browser.');
     return -1;
   }
 
-  req.open('POST', '/dual/message');
-  req.send("score=" + getScore().toString() + "&timeleft=" + getTime().toString());
+  form.append("score", getScore());
+  form.append("timeleft", getTime());
+  req.open("POST", "/dual/message");
+  req.send(form);
+
+}
+
+function settlement(result) {
+
+  clearInterval(sendHandler);
+  clearInterval(getHandler);
+
+  const Toast = Swal.mixin({
+    showConfirmButton: true,
+    animation: true,
+    allowOutsideClick: false,
+    allowEscapeKey: false,
+    allowEnterKey: false,
+  });
+
+  var request = new XMLHttpRequest();
+  request.open("POST", "/dual/settlement");
+  request.send(null)
+
+  if (result == "win") {
+    Toast.fire({
+      type: "success",
+      title: "You win!",
+      html: "<p>Your score: <span class='score'>" + $('#score').text() + "</span></p> \
+      <p>Opponent's score: <span class='score'>" + $('#peer-score').text() + "</span></p>",
+      confirmButtonText: "Main menu",
+      preConfirm: () => {
+        return window.location.replace("/dual");
+      },
+    })
+  } else if (result == "lose") {
+    Toast.fire({
+      type: "error",
+      title: "You lose!",
+      html: "<p>Your score: <span class='score'>" + $('#score').text() + "</span></p> \
+      <p>Opponent's score: <span class='score'>" + $('#peer-score').text() + "</span></p>",
+      confirmButtonText: "Main menu",
+      preConfirm: () => {
+        return window.location.replace("/dual");
+      },
+
+    })
+  } else {
+    Toast.fire({
+      type: "info",
+      title: "Draw.",
+      html: "<p>Your score: <span class='score'>" + $('#score').text() + "</span></p> \
+      <p>Opponent's score: <span class='score'>" + $('#peer-score').text() + "</span></p>",
+      confirmButtonText: "Main menu",
+      preConfirm: () => {
+        return window.location.replace("/dual");
+      },
+    })
+
+  }
 
 }

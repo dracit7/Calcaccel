@@ -65,13 +65,13 @@ def init_app(app):
   app.cli.add_command(init_db_command)
 
 
-@bp.route("/listdb")
+@bp.route("/listdb/<table>")
 @admin_required
-def list_db():
+def list_db(table):
   try:
     users = ""
     c = get_db().cursor()
-    c.execute("SELECT * FROM user")
+    c.execute("SELECT * FROM "+table)
     for user in c:
       users += str(tuple(user)) + "<br>"
     return users
@@ -79,19 +79,29 @@ def list_db():
     return str(err)
 
 
-@bp.route("/deldb")
+@bp.route("/deldb/<table>")
 @admin_required
-def del_db():
-  try:
-    username = request.args["usr"]
-    conn = get_db()
-    c = conn.cursor()
-    c.execute("DELETE FROM user WHERE username = ?", (username,))
-    conn.commit()
-    return "Deleted %s successfully" % username
-  except Exception as err:
-    return str(err)
-
+def del_db(table):
+  if table == "user":
+    try:
+      username = request.args["usr"]
+      conn = get_db()
+      c = conn.cursor()
+      c.execute("DELETE FROM user WHERE username = ?", (username,))
+      conn.commit()
+      return "Deleted %s successfully" % username
+    except Exception as err:
+      return str(err)
+  if table == "runtime_data":
+    try:
+      username = request.args["usr"]
+      conn = get_db()
+      c = conn.cursor()
+      c.execute("DELETE FROM runtime_data WHERE id = ?", (username,))
+      conn.commit()
+      return "Deleted %s successfully" % username
+    except Exception as err:
+      return str(err)
 
 def query(query, args=(), fetchone=False):
   try:
