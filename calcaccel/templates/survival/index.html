@@ -2,19 +2,22 @@
 
 {% block title %}Survival Mode{% endblock %}
 
+{% block style %}
+{% endblock %}
+
 {% block content %}
 <div class="row">
   <div class="col-md-2"></div>
   <div class="col-md-8">
-    <div class="card card-primary" style="margin-top: 5%; height: 140%">
-      <div class="card-header p-1">
+    <div class="card card-primary" style="margin-top: 5%;">
+      <div class="card-header p-0 pl-1 pt-1 border-bottom-0">
         <ul class="nav nav-tabs" role="tablist">
-          <li class="tab-item">
+          <li class="nav-item pr-1">
             <a class="nav-link active" data-toggle="pill" href="#quick-start" role="tab">
               Quick start
             </a>
           </li>
-          <li class="tab-item">
+          <li class="nav-item pr-1">
             <a class="nav-link" data-toggle="pill" href="#customed-start" role="tab">
               Customed start
             </a>
@@ -24,9 +27,23 @@
       <div class="card-body">
         <div class="tab-content">
           <div class="tab-pane fade active show" id="quick-start" role="tabpanel">
-            <div style="text-align: center; margin-top: 15%;">
-              <h1><a href="/survival/play">What are you waiting for?</a></h1>
+            <div class="rule">
+              <h2 style="font-weight: 900; text-align: center">GAME RULES</h2>
+              <p>1. Press number keys and the <code>ENTER</code> key to input a number;</p>
+              <p>2. Right answer would be rewarded with <code>score</code> and <code>time</code>.</p>
+              <p>3. Wrong answer would reduce your <code>time</code> but does not affect your <code>score</code>.</p>
+              <p>4. If there's no <code>time</code> left, the game will be over and your <code>score</code> will be
+                recorded.</p>
             </div>
+            <div style="margin-left: 30%; margin-right: 30%">
+              <button class="btn btn-block btn-outline-primary" onclick="window.location.replace('/survival/play')"
+                style="padding: 0; margin-bottom: 3%">
+                <a style="font-size: 2em;">Start Game</a>
+              </button>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="customed-start" role="tabpanel">
+
           </div>
         </div>
       </div>
