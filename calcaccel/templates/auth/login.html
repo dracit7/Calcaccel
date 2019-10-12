@@ -3,7 +3,7 @@
 {% block title %}Login{% endblock %}
 
 {% block content %}
-<div class="login-box">
+<div class="login-box" style="margin-left: 40%; margin-top: 7%">
   <div class="login-logo">
     <a href=""><b>CalcAccel</b></a>
   </div>
@@ -52,7 +52,7 @@
   })
   {% endfor %}
 
-  {% for message in get_flashed_messages(category_filter=["denied"]) %}
+  {% for message in get_flashed_messages(category_filter = ["denied"]) %}
   Toast.fire({
     type: 'warning',
     title: '{{ message }}'

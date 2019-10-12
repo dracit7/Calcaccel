@@ -9,6 +9,7 @@ from werkzeug.security import generate_password_hash
 
 from calcaccel.admin import bp
 from calcaccel.admin import admin_required
+from calcaccel.config import conf
 
 
 def get_db():
@@ -39,12 +40,17 @@ def init_db():
   """Clear existing data and create new tables."""
   db = get_db()
 
-  with current_app.open_resource("schema.sql") as f:
+  with current_app.open_resource(conf['APP']['database_schema']) as f:
     db.executescript(f.read().decode("utf8"))
 
   db.execute(
-      "INSERT INTO user (username, password, identity, maxgrade) VALUES (?, ?, ?, ?)",
-      ("admin", generate_password_hash("dlcqtql"), "admin", 9999)
+    "INSERT INTO talents (id, prevent_death, blessed) VALUES (?, ?, ?)",
+    (1, 0, 0)
+  )
+
+  db.execute(
+      "INSERT INTO user (username, password, identity, maxgrade, talent_id) VALUES (?, ?, ?, ?, ?)",
+      ("admin", generate_password_hash(conf['admin']['password']), "admin", 9999, 1)
   )
   db.commit()
 

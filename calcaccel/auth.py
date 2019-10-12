@@ -73,8 +73,13 @@ def register():
       # the name is available, store it in the database and go to
       # the login page
       db.execute(
-          "INSERT INTO user (username, password, identity, maxgrade) VALUES (?, ?, ?, ?)",
-          (username, generate_password_hash(password), identity, 0)
+        "INSERT INTO talents (prevent_death, blessed) VALUES (?, ?)",
+        (0, 0)
+      )
+      (talent, ) = db.execute("SELECT last_insert_rowid()").fetchone()
+      db.execute(
+          "INSERT INTO user (username, password, identity, maxgrade, talent_id) VALUES (?, ?, ?, ?, ?)",
+          (username, generate_password_hash(password), identity, 0, talent)
       )
       db.commit()
       flash("Register succeeded!", "info")

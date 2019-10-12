@@ -7,6 +7,7 @@ from flask import session
 
 from calcaccel.db import query, execute
 from calcaccel.auth import login_required
+from calcaccel.config import conf
 
 import time
 import json
@@ -44,7 +45,7 @@ def index():
             execute("INSERT INTO runtime_data (id, score, timeleft, currenttime) VALUES (?, ?, ?, ?)",
                     (you["id"], 0, 0, int(time.time())))
             while True:
-                time.sleep(1)
+                time.sleep(int(conf['dual']['wait_peer_cycle']))
                 runtime = query(
                     "SELECT * FROM runtime_data WHERE id = ?", (peer["id"],), fetchone=True)
                 if runtime is not None:
@@ -73,7 +74,9 @@ def message():
         return ""
 
     if request.method == "GET":
+
         msg = {}
+
         peer = query(
             "SELECT * FROM runtime_data WHERE id = ?",
             (session["peer_id"],),
@@ -83,10 +86,11 @@ def message():
             msg["score"] = -1 # score == -1 means that front-end should not change the score.
             msg["timeleft"] = -1
             return json.dumps(msg)
+
         _, score, timeleft, currenttime = peer
         msg["score"] = score
-        if currenttime + 5 < int(time.time()):
-            # TODO: config time interval
+
+        if currenttime + int(conf['dual']['check_peer_timeout']) < int(time.time()):
             msg["timeleft"] = -1
             execute(
                 "DELETE FROM runtime_data WHERE id = ?",
@@ -94,6 +98,7 @@ def message():
             )
         else:
             msg["timeleft"] = timeleft
+
         return json.dumps(msg)
 
 @bp.route("/settlement", methods=["POST"])
