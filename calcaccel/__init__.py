@@ -36,10 +36,12 @@ def create_app(test_config=None):
   from calcaccel import survival
   from calcaccel import dual
   from calcaccel import admin
+  from calcaccel import home
 
   app.register_blueprint(auth.bp)
   app.register_blueprint(survival.bp)
   app.register_blueprint(dual.bp)
+  app.register_blueprint(home.bp)
   app.register_blueprint(admin.bp)
 
   return app

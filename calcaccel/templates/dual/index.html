@@ -38,9 +38,9 @@
 									style="border-left:none; border-right:none; border-top:none; margin-left: 30%; width: 40%; text-align: center; font-size: 1.5em">
 							</div>
 							<div style="margin-left: 30%; margin-right: 30%">
-								<button class="btn btn-block btn-outline-primary" onclick="window.location.replace('/survival/play')"
+								<button class="btn btn-block btn-outline-primary" onclick="toast()"
 									style="padding: 0; margin-top: 7%; margin-bottom: 7%; width: 60%; margin-left: 20%">
-									<a style="font-size: 1.6em;">Start Game</a>
+									<span style="font-size: 1.6em;">Start Game</span>
 								</button>
 							</div>
 						</form>
@@ -74,6 +74,8 @@
 			type: 'info',
 			title: 'Waiting for your opponent...'
 		})
+
+		window.location.replace('/survival/play');
 
 	}
 
