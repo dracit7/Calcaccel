@@ -74,6 +74,8 @@ def init_app(app):
 @bp.route("/listdb/<table>")
 @admin_required
 def list_db(table):
+  """A web API opened to the front-end which lists out all rows in a table.
+  Designed only for debugging."""
   try:
     users = ""
     c = get_db().cursor()
@@ -88,6 +90,8 @@ def list_db(table):
 @bp.route("/deldb/<table>")
 @admin_required
 def del_db(table):
+  """A web API opened to the front-end which deletes a row in a table.
+  Designed only for debugging."""
   if table == "user":
     try:
       username = request.args["usr"]

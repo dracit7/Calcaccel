@@ -228,8 +228,8 @@ function init_quiz(rank) {
 
   switch (rank) {
     case 1:
-      ope_l = Math.floor(Math.random() * 10) + 1;
-      ope_r = Math.floor(Math.random() * ope_l) + 1;
+      ope_l = Math.floor(Math.random() * 10);
+      ope_r = Math.floor(Math.random() * ope_l);
       switch (Math.floor(Math.random() * 4)) {
         case 0:
           ope = '+';
@@ -242,6 +242,7 @@ function init_quiz(rank) {
           break;
         case 3:
           ope = '/';
+          if (ope_r == 0) ope_r += 1;
           ope_l = Math.floor(Math.random() * 10 + 1) * ope_r;
           break;
       }

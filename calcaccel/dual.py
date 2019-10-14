@@ -19,6 +19,8 @@ bp = Blueprint("dual", __name__, url_prefix="/dual")
 @login_required
 def index():
     """Index page of dual mode."""
+
+    # Get current user's info
     you = query(
         "SELECT * FROM user"
         " WHERE id = ?",
@@ -26,12 +28,14 @@ def index():
         fetchone=True
     )
 
+    # POST to this url means find the opponent by name and begin the game.
     if request.method == "POST":
-        peer = query("SELECT * FROM user WHERE username = ?",
-                     (request.form["username"],), fetchone=True)
 
+        peer = query("SELECT * FROM user WHERE username = ?",
+            (request.form["username"],), fetchone=True)
         error = None
 
+        # Handle possible exceptions
         if peer is None:
             error = "No such user."
             flash(error, "error")
@@ -40,6 +44,8 @@ def index():
             error = "You cannot play with yourself!"
             flash(error, "error")
 
+        # If everything's well, create `runtime_data` for current user
+        # and wait until the opponent's `runtime_data` appears.
         if error is None:
             session["peer_id"] = peer["id"]
             execute("INSERT INTO runtime_data (id, score, timeleft, currenttime) VALUES (?, ?, ?, ?)",
@@ -64,7 +70,10 @@ def play():
 @bp.route("/message", methods=["POST", "GET"])
 @login_required
 def message():
+    """Two players send and get messages by this interface.
+    They post their score and timeleft to each other."""
     if request.method == "POST":
+
         score = request.form["score"]
         timeleft = request.form["timeleft"]
         execute(
@@ -92,6 +101,7 @@ def message():
         msg["score"] = score
 
         if currenttime + int(conf['dual']['check_peer_timeout']) < int(time.time()):
+            # timeleft == -1 means that your opponent logged out from the page.
             msg["timeleft"] = -1
             execute(
                 "DELETE FROM runtime_data WHERE id = ?",

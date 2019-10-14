@@ -11,8 +11,11 @@ def admin_required(view):
 
   @functools.wraps(view)
   def wrapped_view(**kwargs):
+
+    # Admin user's user_id is always 1, that's defined by db_init().
+    # If current user's id is not 1, he is not admin surely.
     if session.get("user_id") is not 1:
-      return ""
+      return "" # Show nothing to non-admin users
 
     return view(**kwargs)
 

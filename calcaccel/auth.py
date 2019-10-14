@@ -21,7 +21,11 @@ def login_required(view):
 
   @functools.wraps(view)
   def wrapped_view(**kwargs):
+
+    # Check the existance of user structure in current session.
     if g.user is None:
+      # If the visiter has not logged in, redirect him to the login page
+      # and send a `denied` message to the frontend.
       flash("You're required to sign in before accessing this page.", "denied")
       return redirect(url_for("auth.login"))
 
@@ -51,12 +55,15 @@ def register():
   password for security.
   """
   if request.method == "POST":
+
     username = request.form["username"]
     password = request.form["password"]
     identity = request.form["identity"]
+
     db = get_db()
     error = None
 
+    # Handle errors
     if not username:
       error = "Username is required."
     elif not password:
