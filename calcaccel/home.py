@@ -12,7 +12,13 @@ bp = Blueprint("home", __name__, url_prefix="/home")
 @bp.route("/<user>/mistakes")
 @login_required
 def index(user):
-  """Index page of survival mode."""
-  # TODO: database querying, get mistakes
-  mistakes = {}
-  return render_template("home/mistakes.html", mistakes=mistakes)
+    """Index page of survival mode."""
+
+    mistakes = {}
+    mistakes["content"] = []
+    records = query("SELECT * FROM mistake WHERE id = ?",
+                    (session["user_id"], ), fetchone=False)
+    for record in records:
+        mistakes["content"] += record["content"]
+        mistakes["times"] += record["error_times"]
+    return render_template("home/mistakes.html", mistakes=mistakes)

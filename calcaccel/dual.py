@@ -83,7 +83,8 @@ def message():
             fetchone=True
         )
         if peer == None:
-            msg["score"] = -1 # score == -1 means that front-end should not change the score.
+            # score == -1 means that front-end should not change the score.
+            msg["score"] = -1
             msg["timeleft"] = -1
             return json.dumps(msg)
 
@@ -100,6 +101,7 @@ def message():
             msg["timeleft"] = timeleft
 
         return json.dumps(msg)
+
 
 @bp.route("/settlement", methods=["POST"])
 @login_required

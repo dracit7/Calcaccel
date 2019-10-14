@@ -26,3 +26,10 @@ CREATE TABLE talents
     prevent_death INTEGER NOT NULL,
     blessed INTEGER NOT NULL
 );
+
+CREATE TABLE mistake
+(
+    id       INTEGER PRIMARY KEY AUTOINCREMENT,
+    error_times INTEGER NOT NULL,
+    content TEXT NOT NULL
+)
