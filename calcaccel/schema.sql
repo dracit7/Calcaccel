@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS runtime_data;
 DROP TABLE IF EXISTS talents;
+DROP TABLE IF EXISTS mistake;
 
 CREATE TABLE user
 (
@@ -30,6 +31,7 @@ CREATE TABLE talents
 CREATE TABLE mistake
 (
     id       INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
     error_times INTEGER NOT NULL,
     content TEXT NOT NULL
 )

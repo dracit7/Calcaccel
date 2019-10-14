@@ -1,3 +1,47 @@
 {% extends 'general/home.html' %}
 
 {% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-md-3"></div>
+  <div class="col-md-6">
+    <div class="card card-danger card-outline">
+      <div class="card-header">
+        <div class="card-tools pull-right">
+          <button class="btn btn-outline-danger" style="font-size: 1.3em">
+            Exercise</button>
+        </div>
+      </div>
+      <div class="card-body">
+        <table class="table table-hover notebook">
+          <tbody style="font-size: 1.3em; text-align: center;">
+            <tr>
+              <th>Content</th>
+              <th>Frequency</th>
+              <th>Actions</th>
+            </tr>
+            {% for mistake in mistakes %}
+            <tr style="font-size: 1.3em">
+              <td>{{ mistake["content"] }} = ?</td>
+              <td>{{ mistake["error_times"] }}</td>
+              <td>
+                <a onclick="deleteMistake('{{ mistake["content"] }}')">
+                  <i class="fa fa-times" style="color: red; cursor: pointer"></i>
+                </a>
+              </td>
+            </tr>
+            {% endfor %}
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3"></div>
+</div>
+{% endblock %}

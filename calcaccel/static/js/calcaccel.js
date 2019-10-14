@@ -27,6 +27,15 @@ function getRank() {
   }
 }
 
+function deleteMistake(content) {
+
+  var req = new XMLHttpRequest();
+  req.open('POST', '/home/mistakes/delete');
+
+  req.send("content=" + content);
+
+}
+
 /*
  * Survival mode (some are global) functions
  */
@@ -79,6 +88,7 @@ function sub1s() {
   $('#time').text((parseInt(timenow, 10)).toString() + "s");
 
   checkprogress();
+  $('#level').text(getRank());
 
   $('#time-control').text("");
 
@@ -367,6 +377,8 @@ function getKeyboardInput(eve) {
         $("#input").text("");
         $('#time-control').text("-" + getRank().toString() + "s");
 
+        recordMistake();
+
       }
 
       init_quiz(getRank());
@@ -549,5 +561,20 @@ function settlement(result) {
     })
 
   }
+
+}
+
+function recordMistake() {
+
+  var req = new XMLHttpRequest();
+  req.open("POST", "/home/mistakes");
+
+  var form = new FormData();
+  form.append(
+    "mistake",
+    $('#operand-l').text() + $('#operator').text() + $('#operand-r').text()
+  );
+
+  req.send(form);
 
 }
