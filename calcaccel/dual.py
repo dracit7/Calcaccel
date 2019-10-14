@@ -43,22 +43,22 @@ def index():
         if error is None:
             session["peer_id"] = peer["id"]
             execute("INSERT INTO runtime_data (id, score, timeleft, currenttime) VALUES (?, ?, ?, ?)",
-                    (you["id"], 0, 0, int(time.time())))
+                    (you["id"], 0, 30, int(time.time())))
             while True:
                 time.sleep(int(conf['dual']['wait_peer_cycle']))
                 runtime = query(
-                    "SELECT * FROM runtime_data WHERE id = ?", (peer["id"],), fetchone=True)
+                    "SELECT * FROM runtime_data WHERE id = ?", (peer["id"], ), fetchone=True)
                 if runtime is not None:
                     return redirect("/dual/play?peer=%s" % peer["username"])
 
-    return render_template("dual/index.html")
+    return render_template("dual/index.html", mode="dual")
 
 
 @bp.route("/play", methods=["POST", "GET"])
 @login_required
 def play():
     """Play page"""
-    return render_template("dual/play.html", peer=request.args["peer"])
+    return render_template("dual/play.html", peer=request.args["peer"], mode="dual")
 
 
 @bp.route("/message", methods=["POST", "GET"])
